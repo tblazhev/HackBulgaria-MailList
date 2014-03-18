@@ -60,6 +60,17 @@ class ListParserTest(unittest.TestCase):
     def test_get_non_existing_list(self):
         self.assertTrue(not self.list_parser.get_list_data(self.test_list_name))
 
+    def test_add_to_list(self):
+        self.list_parser.create_list(self.test_list_name)
+        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
+        self.assertTrue(self.list_parser.add_to_list(self.test_list_name, new_entry))
+        users = self.list_parser.get_list_data(self.test_list_name)
+        self.assertEqual(new_entry, users)
+
+    def test_add_to_nonexisting_list(self):
+        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
+        self.assertTrue(not self.list_parser.add_to_list(self.test_list_name, new_entry))
+
     def tearDown(self):
         files = glob(self.lists_glob_path)
         for f in files:

@@ -53,3 +53,19 @@ class ListParser():
         f.close()
         users = contents.split("\n")
         return users
+
+    def add_to_list(self, list_name, entry):
+        file_path = self.__common_path + list_name
+        try:
+            f = open(file_path, "r+")
+        except IOError:
+            return False
+        contents = f.read()
+        users = contents.split("\n")
+        users.extend(entry)
+        users.remove('')
+        users = "\n".join(users)
+        f.write(users)
+        f.close()
+
+        return True
