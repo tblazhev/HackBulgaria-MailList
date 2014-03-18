@@ -48,14 +48,17 @@ class ListParserTest(unittest.TestCase):
         lists = ["testlist1", "testlist2", "testlist3"]
         self.assertEqual(lists, self.list_parser.get_lists())
 
-    # def test_show_list(self):
-    #     self.list_parser.create_list(self.test_list_name)
-    #     f = open(self.test_list_path, "w")
-    #     contents = "Tedi - tedi@hackbulgaria.com\nAdrian - adrian@hackbulgaria.com"
-    #     f.write(contents)
-    #     f.close()
-    #     users = contents.split("\n")
-    #     self.assertEqual(users, self.list_parser.show_list(self.test_list_name))
+    def test_show_list(self):
+        self.list_parser.create_list(self.test_list_name)
+        f = open(self.test_list_path, "w")
+        contents = "Tedi - tedi@hackbulgaria.com\nAdrian - adrian@hackbulgaria.com"
+        f.write(contents)
+        f.close()
+        users = contents.split("\n")
+        self.assertEqual(users, self.list_parser.show_list(self.test_list_name))
+
+    def test_show_non_existing_list(self):
+        self.assertTrue(not self.list_parser.show_list(self.test_list_name))
 
     def tearDown(self):
         files = glob(self.lists_glob_path)

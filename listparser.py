@@ -43,5 +43,13 @@ class ListParser():
         lists.sort()
         return lists
 
-    # def show_list(self, list_name):
-    #     file_path = self.li
+    def show_list(self, list_name):
+        file_path = self.__common_path + list_name
+        try:
+            f = open(file_path, "r")
+        except IOError:
+            return False
+        contents = f.read()
+        f.close()
+        users = contents.split("\n")
+        return users
