@@ -67,5 +67,13 @@ class ListParser():
         users = "\n".join(users)
         f.write(users)
         f.close()
-
         return True
+
+    def search_email(self, email):
+        lists = self.get_lists()
+        for list_name in lists:
+            users = self.get_list_data(list_name)
+            for user in users:
+                if email in user:
+                    return True
+        return False

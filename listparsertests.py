@@ -71,6 +71,18 @@ class ListParserTest(unittest.TestCase):
         new_entry = ["Gosho - Gosho@hackbulgaria.com"]
         self.assertTrue(not self.list_parser.add_to_list(self.test_list_name, new_entry))
 
+    def test_search_email(self):
+        self.list_parser.create_list(self.test_list_name)
+        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
+        self.list_parser.add_to_list(self.test_list_name, new_entry)
+        self.assertTrue(self.list_parser.search_email("Gosho@hackbulgaria.com"))
+
+    def test_search_non_existing_email(self):
+        self.list_parser.create_list(self.test_list_name)
+        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
+        self.list_parser.add_to_list(self.test_list_name, new_entry)
+        self.assertTrue(not self.list_parser.search_email("Gosho2@hackbulgaria.com"))
+
     def tearDown(self):
         files = glob(self.lists_glob_path)
         for f in files:
