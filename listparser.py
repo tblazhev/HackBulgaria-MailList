@@ -43,7 +43,7 @@ class ListParser():
         lists.sort()
         return lists
 
-    def show_list(self, list_name):
+    def get_list_data(self, list_name):
         file_path = self.__common_path + list_name
         try:
             f = open(file_path, "r")
