@@ -69,31 +69,90 @@ class ListParserTest(unittest.TestCase):
         users = contents.split("\n")
         self.assertEqual(users, self.list_parser.get_list_data(self.test_list_name))
 
-    def test_get_non_existing_list(self):
+    def test_get_non_existing_list_data(self):
         self.assertTrue(not self.list_parser.get_list_data(self.test_list_name))
 
     def test_add_to_list(self):
         self.list_parser.create_list(self.test_list_name)
-        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
-        self.assertTrue(self.list_parser.add_to_list(self.test_list_name, new_entry))
-        users = self.list_parser.get_list_data(self.test_list_name)
-        self.assertEqual(new_entry, users)
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.assertTrue(self.list_parser.add_to_list(self.test_list_name, name, email))
+        name = "Adrian"
+        email = "adrian@hackbulgaria.com"
+        self.assertTrue(self.list_parser.add_to_list(self.test_list_name, name, email))
+
+        expected = "Tedi - tedi@hackbulgaria.com\nAdrian - adrian@hackbulgaria.com"
+        f = open(self.common_path + self.test_list_name, "r")
+        contents = f.read()
+        f.close()
+        self.assertEqual(expected, contents)
+
+    def test_add_existing_item(self):
+        self.list_parser.create_list(self.test_list_name)
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.assertTrue(self.list_parser.add_to_list(self.test_list_name, name, email))
+        self.assertTrue(not self.list_parser.add_to_list(self.test_list_name, name, email))
 
     def test_add_to_nonexisting_list(self):
-        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
-        self.assertTrue(not self.list_parser.add_to_list(self.test_list_name, new_entry))
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.assertTrue(not self.list_parser.add_to_list(self.test_list_name, name, email))
 
     def test_search_email(self):
         self.list_parser.create_list(self.test_list_name)
-        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
-        self.list_parser.add_to_list(self.test_list_name, new_entry)
-        self.assertTrue(self.list_parser.search_email("Gosho@hackbulgaria.com"))
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+        self.assertTrue(self.list_parser.search_email("tedi@hackbulgaria.com"))
 
     def test_search_non_existing_email(self):
         self.list_parser.create_list(self.test_list_name)
-        new_entry = ["Gosho - Gosho@hackbulgaria.com"]
-        self.list_parser.add_to_list(self.test_list_name, new_entry)
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
         self.assertTrue(not self.list_parser.search_email("Gosho2@hackbulgaria.com"))
+
+    def test_update_subscriber(self):
+        self.list_parser.create_list(self.test_list_name)
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+        name = "Tedi2"
+        email = "tedi2@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+        name = "Tedi3"
+        email = "tedi3@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+
+        new_name = 'Tedi4'
+        new_email = 'tedi4@hackbulgaria.com'
+        res = self.list_parser.update_subscriber(self.test_list_name, name, email, new_name, new_email)
+        self.assertTrue(res)
+
+        entry1 = 'Tedi - tedi@hackbulgaria.com'
+        entry2 = 'Tedi2 - tedi2@hackbulgaria.com'
+        entry3 = 'Tedi4 - tedi4@hackbulgaria.com'
+        expected = [entry1, entry2, entry3]
+        users = self.list_parser.get_list_data(self.test_list_name)
+        self.assertEqual(expected, users)
+
+    def test_update_nonexisting_subscriber(self):
+        self.list_parser.create_list(self.test_list_name)
+        name = "Tedi"
+        email = "tedi@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+        name = "Tedi2"
+        email = "tedi2@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+        name = "Tedi3"
+        email = "tedi3@hackbulgaria.com"
+        self.list_parser.add_to_list(self.test_list_name, name, email)
+
+        new_name = 'Tedi4'
+        new_email = 'tedi4@hackbulgaria.com'
+        res = self.list_parser.update_subscriber(self.test_list_name, name, "fakemail@fake", new_name, new_email)
+        self.assertTrue(not res)
 
     def tearDown(self):
         files = glob(self.lists_glob_path)

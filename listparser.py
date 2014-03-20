@@ -65,17 +65,27 @@ class ListParser():
         users = contents.split("\n")
         return users
 
-    def add_to_list(self, list_name, entry):
+    def add_to_list(self, list_name, name, email):
         file_path = self.__common_path + list_name
         try:
-            f = open(file_path, "r+")
+            f = open(file_path, "r")
         except IOError:
             return False
         contents = f.read()
+        f.close()
+
+        if email in contents:
+            return False
+
         users = contents.split("\n")
-        users.extend(entry)
-        users.remove('')
+        new_entry = name + " - " + email
+        users.append(new_entry)
+        if '' in users:
+            users.remove('')
         users = "\n".join(users)
+
+        f = open(file_path, "w")
+        f.seek(0)
         f.write(users)
         f.close()
         return True
@@ -88,3 +98,24 @@ class ListParser():
                 if email in user:
                     return True
         return False
+
+    def update_subscriber(self, list_name, old_name, old_email, new_name, new_email):
+        list_data = self.get_list_data(list_name)
+        old_entry = old_name + " - " + old_email
+        index = False
+        for i, entry in enumerate(list_data):
+            if entry == old_entry:
+                index = i
+                break
+        if not index:
+            return False
+        list_data[index] = new_name + " - " + new_email
+
+        file_path = self.__common_path + list_name
+        try:
+            f = open(file_path, "w")
+        except IOError:
+            return False
+        f.write("\n".join(list_data))
+        f.close()
+        return True
