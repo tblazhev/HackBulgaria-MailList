@@ -16,7 +16,7 @@ class ListParserTest(unittest.TestCase):
 
     def test_init(self):
         self.assertEqual(self.script_path, self.list_parser.get_script_path())
-        self.assertEqual(self.lists_dir_path, self.list_parser.get_lists_path())
+        self.assertEqual(self.lists_dir_path, self.list_parser.get_lists_dir_path())
         self.assertEqual(self.lists_glob_path, self.list_parser.get_glob_path())
 
     def test_spaces_to_underscores(self):
