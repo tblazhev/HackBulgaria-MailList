@@ -9,8 +9,20 @@ class ListParserTest(unittest.TestCase):
     def setUp(self):
         self.list_parser = ListParser()
         self.script_path = os.path.dirname(os.path.realpath(__file__))
-        self.lists_dir_path = self.script_path + "/lists"
-        self.lists_glob_path = self.lists_dir_path + "/list_*"
+
+        self.lists_dir_path = self.script_path + "/lists_test"
+        self.common_path = self.lists_dir_path + "/list_"
+        self.lists_glob_path = self.common_path + "*"
+
+        self.list_parser.set_lists_dir_path(self.lists_dir_path)
+        self.list_parser.set_common_path(self.common_path)
+        self.list_parser.set_glob_path(self.lists_glob_path)
+
+        try:
+            os.mkdir(self.lists_dir_path)
+        except OSError:
+            pass
+
         self.test_list_name = "test_list"
         self.test_list_path = self.lists_dir_path + "/list_" + self.test_list_name
 
@@ -90,6 +102,10 @@ class ListParserTest(unittest.TestCase):
                 os.remove(f)
             except OSError:
                 pass
+        try:
+            os.rmdir(self.lists_dir_path)
+        except OSError:
+            pass
 
 if __name__ == '__main__':
     unittest.main()

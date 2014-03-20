@@ -8,23 +8,34 @@ class ListParser():
         self.__script_path = os.path.dirname(os.path.realpath(__file__))
         self.__lists_dir_path = self.__script_path + "/lists"
         self.__common_path = self.__lists_dir_path + "/list_"
-        self.__glob_path = self.__lists_dir_path + "/list_*"
+        self.__glob_path = self.__common_path + "*"
 
+    """ Getters and Setters """
     def get_script_path(self):
         return self.__script_path
 
     def get_lists_dir_path(self):
         return self.__lists_dir_path
 
+    def set_lists_dir_path(self, path):
+        self.__lists_dir_path = path
+
     def get_common_path(self):
         return self.__common_path
+
+    def set_common_path(self, path):
+        self.__common_path = path
 
     def get_glob_path(self):
         return self.__glob_path
 
+    def set_glob_path(self, path):
+        self.__glob_path = path
+
     def spaces_to_underscores(self, string):
         return string.replace(" ", "_")
 
+    """ API functions """
     def create_list(self, list_name):
         list_name = self.spaces_to_underscores(list_name)
         file_path = self.__lists_dir_path + "/list_" + list_name
