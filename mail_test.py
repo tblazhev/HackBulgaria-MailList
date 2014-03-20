@@ -23,16 +23,6 @@ class test_mail(unittest.TestCase):
         self.assertTrue(
             True, self.command_list.is_command(('hello', 'world'), "hello"))
 
-    def test_show_lists(self):
-        pass
-
-    def test_show_list(self):
-        self.assert(
-            True, self.command_list.show_list(2)
-
-
-
-
 
 # Program Run
 if __name__ == '__main__':
