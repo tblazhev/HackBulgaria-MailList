@@ -11,21 +11,16 @@ class ListParserTest(unittest.TestCase):
         self.list_parser = ListParser()
         self.script_path = os.path.dirname(os.path.realpath(__file__))
 
-        self.lists_dir_path = self.script_path + "/lists_test"
-        self.common_path = self.lists_dir_path + "/list_"
-        self.lists_glob_path = self.common_path + "*"
+        self.lists_dir_path = self.script_path + "/lists_test/"
+        self.lists_glob_path = self.lists_dir_path + "*"
 
         self.list_parser.set_lists_dir_path(self.lists_dir_path)
-        self.list_parser.set_common_path(self.common_path)
         self.list_parser.set_glob_path(self.lists_glob_path)
 
-        try:
-            os.mkdir(self.lists_dir_path)
-        except OSError:
-            pass
+        os.mkdir(self.lists_dir_path)
 
         self.test_list_name = "test_list"
-        self.test_list_path = self.lists_dir_path + "/list_" + self.test_list_name
+        self.test_list_path = self.lists_dir_path + self.test_list_name
 
     def test_init(self):
         self.assertEqual(self.script_path, self.list_parser.get_script_path())
@@ -49,7 +44,7 @@ class ListParserTest(unittest.TestCase):
 
     def test_create_list_with_spaces(self):
         list_with_spaces = "name with spaces"
-        list_with_spaces_path = self.lists_dir_path + "/list_name_with_spaces"
+        list_with_spaces_path = self.lists_dir_path + "name_with_spaces"
         self.list_parser.create_list(list_with_spaces)
         files = glob(self.lists_glob_path)
         self.assertTrue(list_with_spaces_path in files)
@@ -83,7 +78,7 @@ class ListParserTest(unittest.TestCase):
         self.assertTrue(self.list_parser.add_to_list(self.test_list_name, name, email))
 
         expected = "Tedi - tedi@hackbulgaria.com\nAdrian - adrian@hackbulgaria.com"
-        f = open(self.common_path + self.test_list_name, "r")
+        f = open(self.lists_dir_path + self.test_list_name, "r")
         contents = f.read()
         f.close()
         self.assertEqual(expected, contents)
@@ -197,12 +192,18 @@ class ListParserTest(unittest.TestCase):
         users = self.list_parser.get_list_data("list3")
         self.assertEqual(expected_users, users)
 
+    def test_delete_list(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.assertTrue(self.list_parser.delete_list(self.test_list_name))
+        path_to_file = self.lists_dir_path + self.test_list_name
+        self.assertTrue(not os.path.isfile(path_to_file))
+
     def test_export_to_json(self):
         self.list_parser.create_list(self.test_list_name)
         self.list_parser.add_to_list(self.test_list_name, "Tedi", "tedi@hackbulgaria.com")
         self.list_parser.add_to_list(self.test_list_name, "Tedi2", "tedi2@hackbulgaria.com")
         self.assertTrue(self.list_parser.export_to_json(self.test_list_name))
-        path_to_json = self.common_path + self.test_list_name + ".json"
+        path_to_json = self.lists_dir_path + self.test_list_name + ".json"
         self.assertTrue(os.path.isfile(path_to_json))
         expected_json_data = [{"email": "tedi@hackbulgaria.com", "name": "Tedi"}, {"email": "tedi2@hackbulgaria.com", "name": "Tedi2"}]
         f = open(path_to_json, "r")
@@ -211,11 +212,19 @@ class ListParserTest(unittest.TestCase):
         json_data = json.loads(contents)
         self.assertTrue(expected_json_data, json_data)
 
-    def test_delete_list(self):
-        self.list_parser.create_list(self.test_list_name)
-        self.assertTrue(self.list_parser.delete_list(self.test_list_name))
-        path_to_file = self.common_path + self.test_list_name
-        self.assertTrue(not os.path.isfile(path_to_file))
+    # def test_import_from_json(self):
+    #     self.list_parser.create_list(self.test_list_name)
+    #     self.list_parser.add_to_list(self.test_list_name, "Tedi", "tedi@hackbulgaria.com")
+    #     self.list_parser.add_to_list(self.test_list_name, "Tedi2", "tedi2@hackbulgaria.com")
+    #     self.list_parser.export_to_json(self.test_list_name)
+
+    #     self.list_parser.delete_list(self.test_list_name)
+
+    #     path_to_list = self.lists_dir_path + self.test_list_name
+    #     path_to_json = path_to_list + ".json"
+    #     print(path_to_list)
+    #     self.assertTrue(self.list_parser.import_from_json(path_to_json))
+    #     self.assertTrue(os.path.isfile(self.test_list_path))
 
     def tearDown(self):
         files = glob(self.lists_glob_path)

@@ -7,9 +7,8 @@ class ListParser():
     """docstring for ListParser"""
     def __init__(self):
         self.__script_path = os.path.dirname(os.path.realpath(__file__))
-        self.__lists_dir_path = self.__script_path + "/lists"
-        self.__common_path = self.__lists_dir_path + "/list_"
-        self.__glob_path = self.__common_path + "*"
+        self.__lists_dir_path = self.__script_path + "/lists/"
+        self.__glob_path = self.__lists_dir_path + "*"
 
     """ Getters and Setters """
     def get_script_path(self):
@@ -20,12 +19,6 @@ class ListParser():
 
     def set_lists_dir_path(self, path):
         self.__lists_dir_path = path
-
-    def get_common_path(self):
-        return self.__common_path
-
-    def set_common_path(self, path):
-        self.__common_path = path
 
     def get_glob_path(self):
         return self.__glob_path
@@ -39,7 +32,7 @@ class ListParser():
     """ API functions """
     def create_list(self, list_name):
         list_name = self.spaces_to_underscores(list_name)
-        file_path = self.__lists_dir_path + "/list_" + list_name
+        file_path = self.__lists_dir_path + list_name
         try:
             f = open(file_path, "x")
             f.close()
@@ -51,12 +44,12 @@ class ListParser():
         files = glob(self.__glob_path)
         lists = []
         for f in files:
-            lists.append(f.replace(self.__common_path, ""))
+            lists.append(f.replace(self.__lists_dir_path, ""))
         lists.sort()
         return lists
 
     def get_list_data(self, list_name):
-        file_path = self.__common_path + list_name
+        file_path = self.__lists_dir_path + list_name
         try:
             f = open(file_path, "r")
         except IOError:
@@ -67,7 +60,7 @@ class ListParser():
         return users
 
     def add_to_list(self, list_name, name, email):
-        file_path = self.__common_path + list_name
+        file_path = self.__lists_dir_path + list_name
         try:
             f = open(file_path, "r")
         except IOError:
@@ -112,7 +105,7 @@ class ListParser():
             return False
         list_data[index] = new_name + " - " + new_email
 
-        file_path = self.__common_path + list_name
+        file_path = self.__lists_dir_path + list_name
         try:
             f = open(file_path, "w")
         except IOError:
@@ -122,8 +115,8 @@ class ListParser():
         return True
 
     def update_list(self, list_name, new_list_name):
-        old_name = self.__common_path + list_name
-        new_name = self.__common_path + new_list_name
+        old_name = self.__lists_dir_path + list_name
+        new_name = self.__lists_dir_path + new_list_name
         if os.path.isfile(new_name):
             return False
         try:
@@ -141,7 +134,7 @@ class ListParser():
             return False
         users.remove(to_remove)
         try:
-            f = open(self.__common_path + list_name, "w")
+            f = open(self.__lists_dir_path + list_name, "w")
         except IOError:
             return False
         users = "\n".join(users)
@@ -150,7 +143,7 @@ class ListParser():
         return True
 
     def merge_lists(self, list_name_1, list_name_2, new_list_name):
-        path_new_file = self.__common_path + new_list_name
+        path_new_file = self.__lists_dir_path + new_list_name
         if os.path.isfile(path_new_file):
             return False
 
@@ -167,6 +160,14 @@ class ListParser():
         f.close()
         return True
 
+    def delete_list(self, list_name):
+        path_to_file = self.__lists_dir_path + list_name
+        try:
+            os.remove(path_to_file)
+        except:
+            return False
+        return True
+
     def export_to_json(self, list_name):
         subscribers = self.get_list_data(list_name)
         json_list = []
@@ -175,7 +176,7 @@ class ListParser():
             d = {"name": subscriber_parsed[0], "email": subscriber_parsed[1]}
             json_list.append(d)
         json_string = json.dumps(json_list)
-        path_to_json = "{0}{1}.json".format(self.__common_path, list_name)
+        path_to_json = "{0}{1}.json".format(self.__lists_dir_path, list_name)
         try:
             f = open(path_to_json, "w")
             f.write(json_string)
@@ -184,10 +185,10 @@ class ListParser():
             return False
         return True
 
-    def delete_list(self, list_name):
-        path_to_file = self.__common_path + list_name
-        try:
-            os.remove(path_to_file)
-        except:
+    def import_from_json(self, path_to_json):
+        if not os.path.isfile(path_to_json):
             return False
+        list_name = os.path.basename(path_to_json).split(".")[0]
+        print(list_name)
+        self.create_list(list_name)
         return True
