@@ -130,3 +130,35 @@ class ListParser():
         except OSError:
             return False
         return True
+
+    def remove_subscriber(self, list_name, name, email):
+        users = self.get_list_data(list_name)
+        if not users:
+            return False
+        to_remove = "{} - {}".format(name, email)
+        if to_remove not in users:
+            return False
+        users.remove(to_remove)
+        try:
+            f = open(self.__common_path + list_name, "w")
+        except IOError:
+            return False
+        users = "\n".join(users)
+        f.write(users)
+        f.close()
+        return True
+
+    # def merge_lists(self, list_name_1, list_name_2, new_list_name):
+    #     users1 = self.get_list_data(list_name_1)
+    #     users2 = self.get_list_data(list_name_2)
+    #     new_list_users = list(set(users1) | set(users2))
+    #     new_list_users.sort()
+    #     try:
+    #         f = open(self.__common_path + new_list_name, "w")
+    #     except IOError:
+    #         return False
+    #     print(new_list_users)
+    #     new_list_users = "\n".join(new_list_users)
+    #     f.write(new_list_users)
+    #     f.close()
+    #     return True
