@@ -40,7 +40,7 @@ class ListParser():
         list_name = self.spaces_to_underscores(list_name)
         file_path = self.__lists_dir_path + "/list_" + list_name
         try:
-            f = open(file_path, "w")
+            f = open(file_path, "x")
             f.close()
         except IOError:
             return False
