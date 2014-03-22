@@ -1,4 +1,5 @@
 import os
+import json
 from glob import glob
 
 
@@ -164,4 +165,23 @@ class ListParser():
         new_list_users = "\n".join(new_list_users)
         f.write(new_list_users)
         f.close()
+        return True
+
+    def export_to_json(self, list_name):
+        subscribers = self.get_list_data(list_name)
+        json_list = []
+        for subscriber in subscribers:
+            subscriber_parsed = subscriber.split(" - ")
+            print(subscriber_parsed)
+            d = {"name": subscriber_parsed[0], "email": subscriber_parsed[1]}
+            json_list.append(d)
+        print(json_list)
+        json_string = json.dumps(json_list)
+        path_to_json = "{0}{1}.json".format(self.__common_path, list_name)
+        try:
+            f = open(path_to_json, "w")
+            f.write(json_string)
+            f.close()
+        except IOError:
+            return False
         return True

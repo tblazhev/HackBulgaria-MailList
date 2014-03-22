@@ -196,6 +196,19 @@ class ListParserTest(unittest.TestCase):
         users = self.list_parser.get_list_data("list3")
         self.assertEqual(expected_users, users)
 
+    def test_export_to_json(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.list_parser.add_to_list(self.test_list_name, "Tedi", "tedi@hackbulgaria.com")
+        self.list_parser.add_to_list(self.test_list_name, "Tedi2", "tedi2@hackbulgaria.com")
+        self.assertTrue(self.list_parser.export_to_json(self.test_list_name))
+        path_to_json = self.common_path + self.test_list_name + ".json"
+        self.assertTrue(os.path.isfile(path_to_json))
+        json_data = [{"email": "tedi@hackbulgaria.com", "name": "Tedi"}, {"email": "tedi2@hackbulgaria.com", "name": "Tedi2"}]
+        f = open(path_to_json, "r")
+        contents = f.read()
+        f.close()
+        self.assertTrue(json_data, contents)
+
     def tearDown(self):
         files = glob(self.lists_glob_path)
         for f in files:
