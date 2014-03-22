@@ -154,6 +154,21 @@ class ListParserTest(unittest.TestCase):
         res = self.list_parser.update_subscriber(self.test_list_name, name, "fakemail@fake", new_name, new_email)
         self.assertTrue(not res)
 
+    def test_update_list_name(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.assertTrue(self.list_parser.update_list(self.test_list_name, "new_name"))
+        self.assertTrue(not self.list_parser.create_list("new_name"))
+        self.assertTrue(self.list_parser.create_list(self.test_list_name))
+
+    def test_update_nonexisting_list_name(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.assertTrue(not self.list_parser.update_list("does not exist", "new_name"))
+
+    def test_update_list_name_to_name_that_already_exists(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.list_parser.create_list("new_name")
+        self.assertTrue(not self.list_parser.update_list(self.test_list_name, "new_name"))
+
     def tearDown(self):
         files = glob(self.lists_glob_path)
         for f in files:

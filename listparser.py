@@ -50,7 +50,7 @@ class ListParser():
         files = glob(self.__glob_path)
         lists = []
         for f in files:
-            lists.append(f.replace(self.__glob_path[:-1], ""))
+            lists.append(f.replace(self.__common_path, ""))
         lists.sort()
         return lists
 
@@ -118,4 +118,15 @@ class ListParser():
             return False
         f.write("\n".join(list_data))
         f.close()
+        return True
+
+    def update_list(self, list_name, new_list_name):
+        old_name = self.__common_path + list_name
+        new_name = self.__common_path + new_list_name
+        if os.path.isfile(new_name):
+            return False
+        try:
+            os.rename(old_name, new_name)
+        except OSError:
+            return False
         return True
