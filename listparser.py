@@ -148,17 +148,20 @@ class ListParser():
         f.close()
         return True
 
-    # def merge_lists(self, list_name_1, list_name_2, new_list_name):
-    #     users1 = self.get_list_data(list_name_1)
-    #     users2 = self.get_list_data(list_name_2)
-    #     new_list_users = list(set(users1) | set(users2))
-    #     new_list_users.sort()
-    #     try:
-    #         f = open(self.__common_path + new_list_name, "w")
-    #     except IOError:
-    #         return False
-    #     print(new_list_users)
-    #     new_list_users = "\n".join(new_list_users)
-    #     f.write(new_list_users)
-    #     f.close()
-    #     return True
+    def merge_lists(self, list_name_1, list_name_2, new_list_name):
+        path_new_file = self.__common_path + new_list_name
+        if os.path.isfile(path_new_file):
+            return False
+
+        users1 = self.get_list_data(list_name_1)
+        users2 = self.get_list_data(list_name_2)
+        new_list_users = list(set(users1) | set(users2))
+        new_list_users.sort()
+        try:
+            f = open(path_new_file, "w")
+        except IOError:
+            return False
+        new_list_users = "\n".join(new_list_users)
+        f.write(new_list_users)
+        f.close()
+        return True

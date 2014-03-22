@@ -183,19 +183,18 @@ class ListParserTest(unittest.TestCase):
         self.list_parser.create_list("new_name")
         self.assertTrue(not self.list_parser.update_list(self.test_list_name, "new_name"))
 
-    # def test_merge_lists(self):
-    #     self.list_parser.create_list("list1")
-    #     self.list_parser.create_list("list2")
-    #     self.list_parser.add_to_list("list1", "Tedi", "tedi@hackbulgaria.com")
-    #     self.list_parser.add_to_list("list1", "Tedi2", "tedi2@hackbulgaria.com")
-    #     self.list_parser.add_to_list("list2", "Tedi2", "tedi2@hackbulgaria.com")
-    #     self.list_parser.add_to_list("list2", "Tedi3", "tedi3@hackbulgaria.com")
+    def test_merge_lists(self):
+        self.list_parser.create_list("list1")
+        self.list_parser.create_list("list2")
+        self.list_parser.add_to_list("list1", "Tedi", "tedi@hackbulgaria.com")
+        self.list_parser.add_to_list("list1", "Tedi2", "tedi2@hackbulgaria.com")
+        self.list_parser.add_to_list("list2", "Tedi2", "tedi2@hackbulgaria.com")
+        self.list_parser.add_to_list("list2", "Tedi3", "tedi3@hackbulgaria.com")
 
-    #     self.assertTrue(self.list_parser.merge_lists("list1", "list2", "list3"))
-    #     expected_users = ["Tedi - tedi@hackbulgaria.com", "Tedi2 - tedi2@hackbulgaria.com", "tedi3@hackbulgaria.com"]
-    #     users = self.list_parser.get_list_data("list3")
-    #     print(users)
-    #     self.assertEqual(expected_users, users)
+        self.assertTrue(self.list_parser.merge_lists("list1", "list2", "list3"))
+        expected_users = ["Tedi - tedi@hackbulgaria.com", "Tedi2 - tedi2@hackbulgaria.com", "Tedi3 - tedi3@hackbulgaria.com"]
+        users = self.list_parser.get_list_data("list3")
+        self.assertEqual(expected_users, users)
 
     def tearDown(self):
         files = glob(self.lists_glob_path)
