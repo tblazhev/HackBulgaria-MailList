@@ -40,7 +40,7 @@ class ListParser():
         list_name = self.spaces_to_underscores(list_name)
         file_path = self.__lists_dir_path + "/list_" + list_name
         try:
-            f = open(file_path, "x")
+            f = open(file_path, "w")
             f.close()
         except IOError:
             return False
@@ -90,13 +90,11 @@ class ListParser():
         f.close()
         return True
 
-    def search_email(self, email):
-        lists = self.get_lists()
-        for list_name in lists:
-            users = self.get_list_data(list_name)
-            for user in users:
-                if email in user:
-                    return True
+    def search_email(self, list_name, email):
+        users = self.get_list_data(list_name)
+        for user in users:
+            if email in user:
+                return True
         return False
 
     def update_subscriber(self, list_name, old_name, old_email, new_name, new_email):
