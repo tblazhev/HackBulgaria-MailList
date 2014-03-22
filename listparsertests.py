@@ -212,19 +212,20 @@ class ListParserTest(unittest.TestCase):
         json_data = json.loads(contents)
         self.assertTrue(expected_json_data, json_data)
 
-    # def test_import_from_json(self):
-    #     self.list_parser.create_list(self.test_list_name)
-    #     self.list_parser.add_to_list(self.test_list_name, "Tedi", "tedi@hackbulgaria.com")
-    #     self.list_parser.add_to_list(self.test_list_name, "Tedi2", "tedi2@hackbulgaria.com")
-    #     self.list_parser.export_to_json(self.test_list_name)
+    def test_import_from_json(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.list_parser.add_to_list(self.test_list_name, "Tedi", "tedi@hackbulgaria.com")
+        self.list_parser.add_to_list(self.test_list_name, "Tedi2", "tedi2@hackbulgaria.com")
+        self.list_parser.export_to_json(self.test_list_name)
 
-    #     self.list_parser.delete_list(self.test_list_name)
+        self.list_parser.delete_list(self.test_list_name)
 
-    #     path_to_list = self.lists_dir_path + self.test_list_name
-    #     path_to_json = path_to_list + ".json"
-    #     print(path_to_list)
-    #     self.assertTrue(self.list_parser.import_from_json(path_to_json))
-    #     self.assertTrue(os.path.isfile(self.test_list_path))
+        path_to_json = self.test_list_path + ".json"
+        self.assertTrue(self.list_parser.import_from_json(path_to_json))
+        self.assertTrue(os.path.isfile(self.test_list_path))
+        expected_users = ["Tedi - tedi@hackbulgaria.com", "Tedi2 - tedi2@hackbulgaria.com"]
+        users = self.list_parser.get_list_data(self.test_list_name)
+        self.assertEqual(expected_users, users)
 
     def tearDown(self):
         files = glob(self.lists_glob_path)

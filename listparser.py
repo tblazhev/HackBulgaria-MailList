@@ -188,7 +188,20 @@ class ListParser():
     def import_from_json(self, path_to_json):
         if not os.path.isfile(path_to_json):
             return False
+
+        f = open(path_to_json, "r")
+        contents = f.read()
+        f.close()
+        data = json.loads(contents)
+        subscribers = []
+        for item in data:
+            subscriber = "{} - {}".format(item["name"], item["email"])
+            subscribers.append(subscriber)
+
         list_name = os.path.basename(path_to_json).split(".")[0]
-        print(list_name)
         self.create_list(list_name)
+        f = open(self.__lists_dir_path + list_name, "w")
+        f.write("\n".join(subscribers))
+        f.close()
+
         return True
