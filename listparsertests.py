@@ -2,6 +2,7 @@ import unittest
 from listparser import ListParser
 import os
 from glob import glob
+import json
 
 
 class ListParserTest(unittest.TestCase):
@@ -203,11 +204,13 @@ class ListParserTest(unittest.TestCase):
         self.assertTrue(self.list_parser.export_to_json(self.test_list_name))
         path_to_json = self.common_path + self.test_list_name + ".json"
         self.assertTrue(os.path.isfile(path_to_json))
-        json_data = [{"email": "tedi@hackbulgaria.com", "name": "Tedi"}, {"email": "tedi2@hackbulgaria.com", "name": "Tedi2"}]
+        expected_json_data = [{"email": "tedi@hackbulgaria.com", "name": "Tedi"}, {"email": "tedi2@hackbulgaria.com", "name": "Tedi2"}]
         f = open(path_to_json, "r")
         contents = f.read()
         f.close()
-        self.assertTrue(json_data, contents)
+        json_data = json.loads(contents)
+        print(json_data)
+        self.assertTrue(expected_json_data, json_data)
 
     def tearDown(self):
         files = glob(self.lists_glob_path)
