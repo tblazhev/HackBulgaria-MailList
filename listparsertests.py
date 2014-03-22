@@ -209,7 +209,6 @@ class ListParserTest(unittest.TestCase):
         contents = f.read()
         f.close()
         json_data = json.loads(contents)
-        print(json_data)
         self.assertTrue(expected_json_data, json_data)
 
     def tearDown(self):

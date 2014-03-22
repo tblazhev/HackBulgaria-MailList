@@ -172,10 +172,8 @@ class ListParser():
         json_list = []
         for subscriber in subscribers:
             subscriber_parsed = subscriber.split(" - ")
-            print(subscriber_parsed)
             d = {"name": subscriber_parsed[0], "email": subscriber_parsed[1]}
             json_list.append(d)
-        print(json_list)
         json_string = json.dumps(json_list)
         path_to_json = "{0}{1}.json".format(self.__common_path, list_name)
         try:
