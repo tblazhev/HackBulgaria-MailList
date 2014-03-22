@@ -183,3 +183,11 @@ class ListParser():
         except IOError:
             return False
         return True
+
+    def delete_list(self, list_name):
+        path_to_file = self.__common_path + list_name
+        try:
+            os.remove(path_to_file)
+        except:
+            return False
+        return True

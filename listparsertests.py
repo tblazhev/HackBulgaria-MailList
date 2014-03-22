@@ -211,6 +211,12 @@ class ListParserTest(unittest.TestCase):
         json_data = json.loads(contents)
         self.assertTrue(expected_json_data, json_data)
 
+    def test_delete_list(self):
+        self.list_parser.create_list(self.test_list_name)
+        self.assertTrue(self.list_parser.delete_list(self.test_list_name))
+        path_to_file = self.common_path + self.test_list_name
+        self.assertTrue(not os.path.isfile(path_to_file))
+
     def tearDown(self):
         files = glob(self.lists_glob_path)
         for f in files:
