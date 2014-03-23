@@ -38,6 +38,15 @@ def main():
         elif command_list.is_command(command, "search_email"):
             print(command_list.search_email(command[1]))
 
+        elif command_list.is_command(command, "update_subs"):
+            print(command_list.update_subscriber(command[1], command[2]))
+
+        elif command_list.is_command(command, "update_lists"):
+            print(command_list.update_lists(command[1], command[2]))
+
+        elif command_list.is_command(command, "remove_subs"):
+            print(command_list.remove_subscriber(command[1], command[2]))
+
 # elif command_list.is_command(command,  merge_lists, list_identifier_1, list_identifier_2):
 # command_lis.merge_lists(list_identifier_1, list_identifier_2)
 
@@ -47,8 +56,8 @@ def main():
         elif command_list.is_command(command, "exit"):
             break
 
-        else:
-            print(command_list.trigger_unknown_command())
+        # else:
+        #     print(command_list.trigger_unknown_command())
 
 
 # Program run

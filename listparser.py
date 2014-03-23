@@ -91,12 +91,10 @@ class ListParser():
         return True
 
     def search_email(self, email):
-        lists = self.get_lists()
-        for list_name in lists:
-            users = self.get_list_data(list_name)
-            for user in users:
-                if email in user:
-                    return True
+        users = self.get_list_data(list_name)
+        for user in users:
+            if email in user:
+                return True
         return False
 
     def update_subscriber(self, list_name, old_name, old_email, new_name, new_email):
